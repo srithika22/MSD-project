@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EventHub - Sign Up as Organizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="split-container">
+    <div class="split-left">
+        <div class="left-content">
+            <h1>EventHub</h1>
+            <p>Host and manage your events seamlessly.</p>
+        </div>
+    </div>
+    <div class="split-right">
+      <div class="auth-box form-box">
+        <a href="signup.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+        <h2>Sign up as an Organizer</h2>
+        <form id="organizerSignupForm">
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Your Name*</label>
+                    <input type="text" required />
+                </div>
+                <div class="input-group">
+                    <label>Organization Name</label>
+                    <input type="text" />
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Work Email*</label>
+                <input type="email" placeholder="Official Email" required />
+            </div>
+            <div class="input-group">
+                <label>Phone*</label>
+                <div class="phone-input">
+                    <select>
+                        <option>+91</option>
+                    </select>
+                    <input type="tel" required />
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Password*</label>
+                    <div class="password-input">
+                        <input type="password" required />
+                        <i class="fas fa-eye-slash toggle-password"></i>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Confirm Password*</label>
+                    <input type="password" required />
+                </div>
+            </div>
+            <div class="terms">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">All your information is collected, stored and processed as per our data processing guidelines. By signing up on EventHub, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a></label>
+            </div>
+            <button type="submit" class="btn btn-next">Create Account</button>
+            <p class="redirect-text bottom-text">Already have an account? <a href="login.html">Login</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

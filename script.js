@@ -1,80 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const signupForm = document.getElementById('signupForm');
-  const loginForm = document.getElementById('loginForm');
+    const participantSignupForm = document.getElementById('participantSignupForm');
+    const organizerSignupForm = document.getElementById('organizerSignupForm');
+    const loginForm = document.getElementById('loginForm');
 
-  if (signupForm) {
-    const sendOtpBtn = document.getElementById('sendOtpBtn');
-    sendOtpBtn.addEventListener('click', () => {
-      const phone = document.getElementById('signupPhone').value;
-      if (phone) {
-        // In a real application, you would send a request to your server to send an OTP.
-        // For this example, we'll just generate a random one and show it in an alert.
-        const otp = Math.floor(1000 + Math.random() * 9000);
-        alert(`Your OTP is: ${otp}`);
-        // You might want to store this OTP somewhere to verify it later, e.g., in session storage.
-        sessionStorage.setItem('otp', otp);
-      } else {
-        alert('Please enter your phone number.');
-      }
-    });
+    // Initialize users array from local storage, or create an empty one
+    const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    signupForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('signupName').value;
-      const phone = document.getElementById('signupPhone').value;
-      const otp = document.getElementById('signupOtp').value;
-      const password = document.getElementById('signupPassword').value;
-      const confirmPassword = document.getElementById('signupConfirmPassword').value;
-      const storedOtp = sessionStorage.getItem('otp');
+    // --- Participant Signup ---
+    if (participantSignupForm) {
+        participantSignupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const emailInput = e.target.querySelector('input[type="email"]');
+            const passwordInput = e.target.querySelector('input[type="password"]');
+            const firstNameInput = e.target.querySelector('input[type="text"]');
+            const phoneInput = e.target.querySelector('input[type="tel"]');
 
-      if (password !== confirmPassword) {
-        alert('Passwords do not match.');
-        return;
-      }
+            const email = emailInput.value;
+            const password = passwordInput.value;
 
-      if (otp === storedOtp) {
-        // In a real application, you would send the user's details to your server.
-        alert('Signup successful!');
-        // Redirect to login page
-        window.location.href = 'login.html';
-      } else {
-        alert('Invalid OTP.');
-      }
-    });
-  }
+            // Check if user already exists
+            if (users.find(user => user.email === email)) {
+                alert('User with this email already exists.');
+                return;
+            }
 
-  if (loginForm) {
-    const sendOtpBtn = document.getElementById('sendOtpBtn');
-    sendOtpBtn.addEventListener('click', () => {
-        const phone = document.getElementById('loginPhone').value;
-        if (phone) {
-            // In a real application, you would send a request to your server to send an OTP.
-            // For this example, we'll just generate a random one and show it in an alert.
-            const otp = Math.floor(1000 + Math.random() * 9000);
-            alert(`Your OTP is: ${otp}`);
-            // You might want to store this OTP somewhere to verify it later, e.g., in session storage.
-            sessionStorage.setItem('otp', otp);
-        } else {
-            alert('Please enter your phone number.');
-        }
-    });
+            const newUser = {
+                firstName: firstNameInput.value,
+                email: email,
+                phone: phoneInput.value,
+                password: password, // In a real app, hash this password
+                type: 'participant'
+            };
 
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
 
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const phone = document.getElementById('loginPhone').value;
-      const password = document.getElementById('loginPassword').value;
-      const otp = document.getElementById('loginOtp').value;
-      const storedOtp = sessionStorage.getItem('otp');
+            alert('Signup successful! Please log in.');
+            window.location.href = 'login.html';
+        });
+    }
 
-      if (otp === storedOtp) {
-        // In a real application, you would verify the user's credentials on your server.
-        alert('Login successful!');
-        // Redirect to a dashboard or home page
-        // window.location.href = 'dashboard.html';
-      } else {
-        alert('Invalid OTP.');
-      }
-    });
-  }
+    // --- Organizer Signup ---
+    if (organizerSignupForm) {
+        organizerSignupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const emailInput = e.target.querySelector('input[type="email"]');
+            const passwordInput = e.target.querySelector('input[type="password"]');
+            const nameInput = e.target.querySelector('input[type="text"]');
+            const phoneInput = e.target.querySelector('input[type="tel"]');
+            
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            // Check if user already exists
+            if (users.find(user => user.email === email)) {
+                alert('User with this email already exists.');
+                return;
+            }
+
+            const newUser = {
+                name: nameInput.value,
+                email: email,
+                phone: phoneInput.value,
+                password: password, // In a real app, hash this password
+                type: 'organizer'
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert('Signup successful! Please log in.');
+            window.location.href = 'login.html';
+        });
+    }
+
+    // --- Login ---
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                // Store current user info in session storage for the session
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                alert('Login successful!');
+
+                // Redirect based on user type
+                if (user.type === 'organizer') {
+                    window.location.href = 'organizer-dashboard.html';
+                } else {
+                    window.location.href = 'participant-dashboard.html';
+                }
+            } else {
+                alert('Invalid email or password.');
+            }
+        });
+    }
 });
+

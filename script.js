@@ -3,10 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const organizerSignupForm = document.getElementById('organizerSignupForm');
     const loginForm = document.getElementById('loginForm');
 
-    // Initialize users array from local storage, or create an empty one
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // --- Participant Signup ---
     if (participantSignupForm) {
         participantSignupForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = emailInput.value;
             const password = passwordInput.value;
 
-            // Check if user already exists
             if (users.find(user => user.email === email)) {
                 alert('User with this email already exists.');
                 return;
@@ -29,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 firstName: firstNameInput.value,
                 email: email,
                 phone: phoneInput.value,
-                password: password, // In a real app, hash this password
+                password: password, 
                 type: 'participant'
             };
 
@@ -41,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Organizer Signup ---
     if (organizerSignupForm) {
         organizerSignupForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -54,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = emailInput.value;
             const password = passwordInput.value;
 
-            // Check if user already exists
+
             if (users.find(user => user.email === email)) {
                 alert('User with this email already exists.');
                 return;
@@ -64,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: nameInput.value,
                 email: email,
                 phone: phoneInput.value,
-                password: password, // In a real app, hash this password
+                password: password, 
                 type: 'organizer'
             };
 
@@ -76,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Login ---
+
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -87,11 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = users.find(u => u.email === email && u.password === password);
 
             if (user) {
-                // Store current user info in session storage for the session
                 sessionStorage.setItem('currentUser', JSON.stringify(user));
                 alert('Login successful!');
 
-                // Redirect based on user type
                 if (user.type === 'organizer') {
                     window.location.href = 'organizer-dashboard.html';
                 } else {
